@@ -1,20 +1,19 @@
-.PHONY: build push
+.PHONY: build push clean
+
+VERSION = 8u121
+KEY=e9e7ea248e2c4826b92b3f075a80e441
  
-TAG = 8u121
-REPO = dil001/docker-jre-arm64
+SUBDIRS = openjdk oracle 
 
 build:
-	docker build -t $(REPO) .
-	docker tag $(REPO) $(REPO):$(TAG)
-
-rebuild:
-	docker build --no-cache -t $(REPO):$(TAG) .
-	docker tag $(REPO):$(TAG) $(REPO)
-
+	for dir in $(SUBDIRS); do \
+		VERSION=$(VERSION) KEY=$(KEY) $(MAKE) -e -C $$dir build; \
+	done 
 push:
-	docker -- push $(REPO):$(TAG)
-	docker -- push $(REPO)
-
+	for dir in $(SUBDIRS); do \
+		VERSION=$(VERSION) $(MAKE) -e -C $$dir push; \
+	done 
 clean:
-	docker rmi $(REPO):$(TAG)
-	docker rmi $(REPO)
+	for dir in $(SUBDIRS); do \
+		VERSION=$(VERSION) $(MAKE) -e -C $$dir clean; \
+	done 
