@@ -1,4 +1,4 @@
-FROM dil001/ubuntu-slim-arm64:0.6
+FROM dil001/ubuntu-slim-arm64
 
 ARG VERSION=8u121
 ARG BUILD=b13
